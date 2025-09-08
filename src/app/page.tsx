@@ -3,31 +3,32 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { EmergencyModal } from '@/components/emergency-modal';
-import { AssistanceBot } from '@/components/assistance-bot';
+import { SosButton } from '@/components/sos-button';
 import { motion } from 'framer-motion';
-import { Sparkles, Activity, ShieldCheck, Zap } from 'lucide-react';
+import { ShieldCheck, Zap, Pill } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Home() {
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState(false);
 
   const features = [
     {
-      icon: <Activity className="h-6 w-6 text-primary" />,
-      title: 'Real-time Vitals',
+      icon: <Zap className="h-6 w-6 text-primary" />,
+      title: 'Instant SOS',
       description:
-        'Our system monitors your vital signs through your camera, providing instant health insights.',
+        'One-click SOS to automatically dispatch drones and ambulances to your exact location.',
     },
     {
       icon: <ShieldCheck className="h-6 w-6 text-primary" />,
       title: 'AI First-Aid',
       description:
-        'Get instant, step-by-step first-aid guidance from our intelligent Assistant Bot.',
+        'Get instant, step-by-step first-aid guidance from our intelligent Assistant Bot while help is on the way.',
     },
     {
-      icon: <Zap className="h-6 w-6 text-primary" />,
-      title: 'Emergency Dispatch',
+      icon: <Pill className="h-6 w-6 text-primary" />,
+      title: 'Medicine Locator',
       description:
-        'Automatically dispatch emergency services to your location when needed.',
+        'Quickly find and pre-order essential medicines from nearby highway pickup points.',
     },
   ];
 
@@ -50,7 +51,7 @@ export default function Home() {
             </motion.div>
           </div>
           <div className="mt-16 flex justify-center">
-             <AssistanceBot onActivate={() => setIsEmergencyModalOpen(true)} />
+             <SosButton onActivate={() => setIsEmergencyModalOpen(true)} />
           </div>
         </div>
 
