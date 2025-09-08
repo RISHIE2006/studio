@@ -22,7 +22,7 @@ export default function Home() {
       icon: <ShieldCheck className="h-6 w-6 text-primary" />,
       title: 'AI First-Aid',
       description:
-        'Get instant, step-by-step first-aid guidance from our intelligent Assistant Bot while help is on the way.',
+        'Get instant, step-by-step first-aid guidance from our intelligent Assistant Bot.',
     },
     {
       icon: <Pill className="h-6 w-6 text-primary" />,
