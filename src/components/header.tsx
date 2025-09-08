@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons/logo';
-import { Pilule, User } from 'lucide-react';
+import { Pill, User } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -11,7 +11,7 @@ export function Header() {
   const pathname = usePathname();
 
   const navLinks = [
-    { href: '/medicine', label: 'Medicine Locator', icon: Pilule },
+    { href: '/medicine', label: 'Medicine Locator', icon: Pill },
     { href: '/login', label: 'Partner Portal', icon: User },
   ];
 
