@@ -69,13 +69,13 @@ export function MedicineFinder() {
   );
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-      <div className="lg:col-span-2">
-        <Card className="h-full">
+    <div className="grid h-[calc(100vh-8rem)] grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="lg:col-span-2 h-full">
+        <Card className="h-full flex flex-col">
           <CardHeader>
             <CardTitle>Pickup Locations Map</CardTitle>
           </CardHeader>
-          <CardContent className='h-[calc(100%-4rem)]'>
+          <CardContent className='flex-grow'>
             <div className="relative h-full w-full overflow-hidden rounded-lg bg-muted">
               <Map locations={mapLocations} />
             </div>
@@ -92,7 +92,7 @@ export function MedicineFinder() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="space-y-4 max-h-[70vh] overflow-y-auto">
+        <div className="space-y-4 max-h-[calc(100vh-12rem)] overflow-y-auto">
           {filteredLocations.map((location, index) => (
             <Card key={index}>
               <CardHeader>
