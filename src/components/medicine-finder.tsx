@@ -10,8 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import Image from 'next/image';
-import { MapPin, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Map } from './map';
 
 const pickupLocations = [
   {
@@ -30,20 +30,32 @@ const pickupLocations = [
     type: 'Toll Booth',
     distance: '5 km',
     medicines: ['Painkillers', 'Bandages'],
+    lat: 20.983,
+    lng: 78.583,
   },
   {
     name: 'NHAI Highway Stop',
     type: 'Kiosk',
     distance: '8 km',
     medicines: ['Antiseptics', 'Gauze'],
+    lat: 20.6,
+    lng: 78.9,
   },
   {
     name: 'Expressway Fuel Station',
     type: 'Petrol Pump',
     distance: '12 km',
     medicines: ['Painkillers', 'First-aid kits'],
+    lat: 20.3,
+    lng: 79.2,
   },
 ];
+
+const mapLocations = pickupLocations.map(loc => ({
+    name: loc.name,
+    lat: loc.lat,
+    lng: loc.lng
+}))
 
 export function MedicineFinder() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -59,28 +71,13 @@ export function MedicineFinder() {
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
       <div className="lg:col-span-2">
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Pickup Locations Map</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="relative h-96 w-full overflow-hidden rounded-lg bg-muted">
-              <Image
-                src="https://picsum.photos/seed/highwaymap/1200/800"
-                alt="Map of pickup locations"
-                data-ai-hint="map road"
-                fill
-                style={{ objectFit: 'cover' }}
-              />
-              <div className="absolute top-1/4 left-1/3 text-accent">
-                <MapPin className="h-8 w-8" />
-              </div>
-              <div className="absolute top-2/3 left-1/2 text-accent">
-                <MapPin className="h-8 w-8" />
-              </div>
-              <div className="absolute top-1/2 right-1/4 text-accent">
-                <MapPin className="h-8 w-8" />
-              </div>
+          <CardContent className='h-[calc(100%-4rem)]'>
+            <div className="relative h-full w-full overflow-hidden rounded-lg bg-muted">
+              <Map locations={mapLocations} />
             </div>
           </CardContent>
         </Card>
@@ -95,7 +92,7 @@ export function MedicineFinder() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 max-h-[70vh] overflow-y-auto">
           {filteredLocations.map((location, index) => (
             <Card key={index}>
               <CardHeader>
