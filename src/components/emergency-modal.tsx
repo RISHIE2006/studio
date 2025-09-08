@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { getFirstAidInstructions } from '@/ai/flows/automated-first-aid-instructions';
-import { Loader2, Bot, Video, VideoOff, Siren } from 'lucide-react';
+import { Loader2, Bot, Video, VideoOff, Siren, LocateFixed } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -35,6 +35,8 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
   const [firstAidState, setFirstAidState] = useState<FirstAidState>('idle');
   const [situation, setSituation] = useState('');
   const [instructions, setInstructions] = useState('');
+  const [location, setLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
@@ -45,8 +47,11 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
       setFirstAidState('idle');
       setSituation('');
       setInstructions('');
+      setLocation(null);
+      setLocationError(null);
 
-      const getCameraPermission = async () => {
+      const getPermissions = async () => {
+        // Camera
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
           setHasCameraPermission(true);
@@ -62,8 +67,32 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
             description: 'Please enable camera permissions for vital sign monitoring.',
           });
         }
+        
+        // Geolocation
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              setLocation({
+                lat: position.coords.latitude,
+                lon: position.coords.longitude,
+              });
+              setLocationError(null);
+            },
+            (error) => {
+              setLocationError(error.message);
+               toast({
+                variant: 'destructive',
+                title: 'Location Access Denied',
+                description: 'Please enable location services for emergency dispatch.',
+              });
+            }
+          );
+        } else {
+          setLocationError('Geolocation is not supported by your browser.');
+        }
       };
-      getCameraPermission();
+      getPermissions();
+
     } else {
         // Stop camera stream when modal is closed
         if (videoRef.current && videoRef.current.srcObject) {
@@ -99,9 +128,9 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
             exit={{ opacity: 0, x: -50 }}
             className="flex flex-col items-center justify-center h-full text-center p-6"
           >
-            <DialogTitle className="text-2xl font-bold">Vital Sign Scan</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">Vital Sign Scan & GPS Lock</DialogTitle>
             <DialogDescription className="mt-2">
-              Please remain still while we scan your vital signs using your camera.
+              Please remain still. We're scanning your vitals and acquiring your GPS location.
             </DialogDescription>
             <div className="relative w-full max-w-md aspect-video bg-muted rounded-lg my-6 overflow-hidden">
                 <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
@@ -112,22 +141,28 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
                     </div>
                 )}
             </div>
+
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+              <LocateFixed className="h-4 w-4"/>
+              {location ? `Location acquired: ${location.lat.toFixed(4)}, ${location.lon.toFixed(4)}` : (locationError ? `Location error: ${locationError}`: 'Acquiring location...')}
+            </div>
+
             {hasCameraPermission === null ? (
                 <Button disabled>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Requesting Camera...
+                    Requesting Permissions...
                 </Button>
             ) : (
-                <Button onClick={() => setStep('guidance')} disabled={!hasCameraPermission}>
+                <Button onClick={() => setStep('guidance')} disabled={!hasCameraPermission || !location}>
                     Proceed to Guidance
                 </Button>
             )}
 
-            {!hasCameraPermission && (
+            {(!hasCameraPermission || !location) && (
               <Alert variant="destructive" className="mt-4">
-                <AlertTitle>Camera Access Required</AlertTitle>
+                <AlertTitle>Permissions Required</AlertTitle>
                 <AlertDescription>
-                  Please allow camera access to use this feature.
+                  Please allow camera and location access to use all emergency features.
                 </AlertDescription>
               </Alert>
             )}
@@ -213,8 +248,8 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
           >
             <Siren className="h-16 w-16 text-primary animate-pulse"/>
             <DialogTitle className="text-2xl font-bold mt-4">Emergency Services Dispatched</DialogTitle>
-            <DialogDescription className="mt-2">
-              Help is on the way. Estimated arrival: 12 minutes.
+            <DialogDescription className="mt-2 max-w-sm">
+              Help is on the way to your location ({location?.lat.toFixed(4)}, {location?.lon.toFixed(4)}). Estimated arrival: 12 minutes.
             </DialogDescription>
             <div className="mt-6 w-full">
                 <p className="text-sm text-muted-foreground">You can close this window. We will notify you of updates.</p>
