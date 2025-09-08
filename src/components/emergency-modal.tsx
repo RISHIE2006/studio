@@ -77,6 +77,10 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl h-[90vh] flex flex-col p-0">
+        <DialogHeader>
+            <DialogTitle className="sr-only">Emergency Assistance</DialogTitle>
+            <DialogDescription className="sr-only">A modal for emergency assistance, tracking, and first-aid.</DialogDescription>
+        </DialogHeader>
         {modalState === 'connecting' && (
           <div className="flex flex-col items-center justify-center h-full">
             <AmbulanceIcon className="h-24 w-24 text-primary animate-pulse" />
