@@ -6,7 +6,6 @@ import { EmergencyModal } from '@/components/emergency-modal';
 import { AuraBot } from '@/components/aura-bot';
 import { motion } from 'framer-motion';
 import { Sparkles, Activity, ShieldCheck, Zap } from 'lucide-react';
-import { AuraHero } from '@/components/aura-hero';
 
 export default function Home() {
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState(false);
@@ -35,7 +34,7 @@ export default function Home() {
   return (
     <>
       <div className="relative isolate overflow-hidden">
-        <div className="container mx-auto px-6 pt-10 pb-24 text-center sm:pb-32 lg:px-8">
+        <div className="container mx-auto px-6 pt-24 pb-24 text-center sm:pb-32 lg:px-8">
           <div className="mx-auto max-w-2xl">
              <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -49,9 +48,6 @@ export default function Home() {
                 Your intelligent health companion, always by your side.
               </p>
             </motion.div>
-          </div>
-          <div className="relative mt-16 h-80">
-            <AuraHero />
           </div>
           <div className="mt-16 flex justify-center">
              <AuraBot onActivate={() => setIsEmergencyModalOpen(true)} />
