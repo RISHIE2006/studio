@@ -7,8 +7,8 @@ import { Header } from '@/components/header';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Aura Health',
-  description: 'Your intelligent health companion.',
+  title: 'HighwayHealers',
+  description: 'Your intelligent highway emergency companion.',
 };
 
 export default function RootLayout({

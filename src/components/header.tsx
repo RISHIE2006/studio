@@ -26,7 +26,7 @@ export function Header() {
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Logo className="h-6 w-6 text-primary" />
           <span className="font-bold sm:inline-block">
-            Aura Health
+            HighwayHealers
           </span>
         </Link>
         <nav className="flex flex-1 items-center justify-end space-x-6">

@@ -2,11 +2,11 @@
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
-interface AuraBotProps {
+interface AssistanceBotProps {
   onActivate: () => void;
 }
 
-export function AuraBot({ onActivate }: AuraBotProps) {
+export function AssistanceBot({ onActivate }: AssistanceBotProps) {
   return (
     <motion.button
       onClick={onActivate}
@@ -16,7 +16,7 @@ export function AuraBot({ onActivate }: AuraBotProps) {
     >
       <div className="z-10 flex items-center gap-3 rounded-full bg-background/80 px-8 py-4 backdrop-blur-sm transition-colors group-hover:bg-background/70">
         <Sparkles className="h-6 w-6 text-primary" />
-        <span className="text-lg font-semibold">Talk to Aura Bot</span>
+        <span className="text-lg font-semibold">Talk to Assistance Bot</span>
       </div>
       <motion.div
         className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary to-accent opacity-50 blur-lg"

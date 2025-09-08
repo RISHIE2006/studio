@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { EmergencyModal } from '@/components/emergency-modal';
-import { AuraBot } from '@/components/aura-bot';
+import { AssistanceBot } from '@/components/assistance-bot';
 import { motion } from 'framer-motion';
 import { Sparkles, Activity, ShieldCheck, Zap } from 'lucide-react';
 
@@ -15,13 +15,13 @@ export default function Home() {
       icon: <Activity className="h-6 w-6 text-primary" />,
       title: 'Real-time Vitals',
       description:
-        'Aura monitors your vital signs through your camera, providing instant health insights.',
+        'Our system monitors your vital signs through your camera, providing instant health insights.',
     },
     {
       icon: <ShieldCheck className="h-6 w-6 text-primary" />,
       title: 'AI First-Aid',
       description:
-        'Get instant, step-by-step first-aid guidance from our intelligent Aura Bot.',
+        'Get instant, step-by-step first-aid guidance from our intelligent Assistant Bot.',
     },
     {
       icon: <Zap className="h-6 w-6 text-primary" />,
@@ -42,15 +42,15 @@ export default function Home() {
               transition={{ duration: 0.8 }}
             >
               <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                Aura Health
+                HighwayHealers
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-300">
-                Your intelligent health companion, always by your side.
+                Your intelligent highway emergency companion, always by your side.
               </p>
             </motion.div>
           </div>
           <div className="mt-16 flex justify-center">
-             <AuraBot onActivate={() => setIsEmergencyModalOpen(true)} />
+             <AssistanceBot onActivate={() => setIsEmergencyModalOpen(true)} />
           </div>
         </div>
 
@@ -64,7 +64,7 @@ export default function Home() {
                 Everything you need for peace of mind
               </p>
               <p className="mt-6 text-lg leading-8 text-gray-300">
-                Aura Health combines cutting-edge AI with emergency services to provide a comprehensive safety net, wherever you are.
+                HighwayHealers combines cutting-edge AI with emergency services to provide a comprehensive safety net, wherever you are.
               </p>
             </div>
             <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
