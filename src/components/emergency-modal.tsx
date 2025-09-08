@@ -232,7 +232,7 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
             </div>
              <div className="pt-4 border-t">
               <Button onClick={() => setStep('tracking')} className="w-full">
-                <Siren className="mr-2"/> Dispatch Emergency Services
+                <Siren className="mr-2"/> Connect to NHAI Emergency Services
               </Button>
             </div>
           </motion.div>
@@ -247,7 +247,7 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
             className="flex flex-col items-center justify-center h-full text-center p-6"
           >
             <Siren className="h-16 w-16 text-primary animate-pulse"/>
-            <DialogTitle className="text-2xl font-bold mt-4">Emergency Services Dispatched</DialogTitle>
+            <DialogTitle className="text-2xl font-bold mt-4">NHAI Services Dispatched</DialogTitle>
             <DialogDescription className="mt-2 max-w-sm">
               Help is on the way to your location ({location?.lat.toFixed(4)}, {location?.lon.toFixed(4)}). Estimated arrival: 12 minutes.
             </DialogDescription>

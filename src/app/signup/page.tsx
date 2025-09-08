@@ -13,37 +13,34 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    // Check for partner credentials and redirect to dashboard
-    const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value;
-    if (email.endsWith('@partner.nha.gov.in')) {
-      router.push('/dashboard');
-    } else {
-      router.push('/');
-    }
+    router.push('/');
   };
 
   return (
     <div className="flex h-[calc(100vh-4rem)] items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account.
+            Create an account to get started.
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSignup}>
           <CardContent className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" type="text" placeholder="John Doe" required />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                name="email"
                 placeholder="me@example.com"
                 required
               />
@@ -54,15 +51,12 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex-col items-start gap-4">
-            <Button className="w-full">Sign In</Button>
-             <div className="text-sm text-muted-foreground">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline">
-                Sign up
+            <Button className="w-full">Create Account</Button>
+            <div className="text-sm text-muted-foreground">
+              Already have an account?{' '}
+              <Link href="/login" className="underline">
+                Login
               </Link>
-            </div>
-            <div className="text-xs text-center w-full text-muted-foreground pt-4">
-              NHAI Partners should log in with their official email (@partner.nha.gov.in) to access the dashboard.
             </div>
           </CardFooter>
         </form>

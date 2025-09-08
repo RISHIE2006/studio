@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Logo } from '@/components/icons/logo';
-import { LayoutGrid, User, Pill } from 'lucide-react';
+import { LayoutGrid, User, Pill, UserPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -12,8 +12,9 @@ export function Header() {
 
   const navLinks = [
     { href: '/medicine', label: 'Medicine Locator', icon: Pill },
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
-    { href: '/login', label: 'Partner Login', icon: User },
+    { href: '/dashboard', label: 'NHAI Dashboard', icon: LayoutGrid },
+    { href: '/login', label: 'Login', icon: User },
+    { href: '/signup', label: 'Sign Up', icon: UserPlus },
   ];
 
   return (
