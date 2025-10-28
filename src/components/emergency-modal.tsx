@@ -10,14 +10,16 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Siren, LocateFixed, VideoOff } from 'lucide-react';
+import { Loader2, Siren, LocateFixed, Phone, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { DroneIcon } from './icons/drone-icon';
 import { AmbulanceIcon } from './icons/ambulance-icon';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 
-type ModalStep = 'location' | 'tracking';
+type ModalStep = 'contact' | 'location' | 'tracking';
 
 interface EmergencyModalProps {
   isOpen: boolean;
@@ -25,20 +27,37 @@ interface EmergencyModalProps {
 }
 
 export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
-  const [step, setStep] = useState<ModalStep>('location');
+  const [step, setStep] = useState<ModalStep>('contact');
   const [location, setLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [emergencyContact, setEmergencyContact] = useState('');
   const { toast } = useToast();
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (isOpen) {
-      setStep('location');
+      // Reset state when modal opens
+      setStep('contact');
       setLocation(null);
       setLocationError(null);
+      setEmergencyContact('');
+    }
+  }, [isOpen]);
 
-      // Geolocation
-      if ('geolocation' in navigator) {
+  const handleContactSubmit = () => {
+    if (emergencyContact && !/^\d{10}$/.test(emergencyContact)) {
+        toast({
+            variant: 'destructive',
+            title: 'Invalid Phone Number',
+            description: 'Please enter a valid 10-digit phone number.',
+        });
+        return;
+    }
+    setStep('location');
+    startLocationAcquisition();
+  };
+
+  const startLocationAcquisition = () => {
+     if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             setLocation({
@@ -46,7 +65,6 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
               lon: position.coords.longitude,
             });
             setLocationError(null);
-            // Automatically proceed to next step once location is acquired
             setTimeout(() => setStep('tracking'), 1000);
           },
           (error) => {
@@ -66,12 +84,50 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
           description: 'Your browser does not support geolocation.',
         });
       }
-    }
-  }, [isOpen, toast]);
+  }
 
 
   const renderStep = () => {
     switch (step) {
+      case 'contact':
+        return (
+          <motion.div
+            key="contact"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="flex flex-col items-center justify-center h-full text-center p-6"
+          >
+            <DialogTitle className="text-2xl font-bold">Emergency Contact</DialogTitle>
+            <DialogDescription className="mt-2">
+              Enter a phone number to notify in case of an emergency.
+            </DialogDescription>
+
+            <div className="my-8 w-full max-w-sm">
+                <div className="grid gap-2 text-left">
+                    <Label htmlFor="emergency-contact" className="flex items-center gap-2">
+                        <Phone className="h-4 w-4" /> Emergency Contact Number
+                    </Label>
+                    <Input
+                        id="emergency-contact"
+                        type="tel"
+                        placeholder="e.g., 1234567890"
+                        value={emergencyContact}
+                        onChange={(e) => setEmergencyContact(e.target.value)}
+                    />
+                </div>
+            </div>
+
+            <Button onClick={handleContactSubmit}>Confirm and Continue</Button>
+            <Button variant="link" className="mt-2 text-muted-foreground" onClick={() => {
+                setEmergencyContact('');
+                setStep('location');
+                startLocationAcquisition();
+            }}>
+                Skip for now
+            </Button>
+          </motion.div>
+        );
       case 'location':
         return (
           <motion.div
@@ -115,9 +171,10 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
             className="flex flex-col items-center justify-center h-full text-center p-6"
           >
             <Siren className="h-16 w-16 text-primary animate-pulse"/>
-            <DialogTitle className="text-2xl font-bold mt-4">NHAI Services Dispatched</DialogTitle>
+            <DialogTitle className="text-2xl font-bold mt-4">NHAI & Contact Notified</DialogTitle>
             <DialogDescription className="mt-2 max-w-sm">
               Help is on the way to your location ({location?.lat.toFixed(4)}, {location?.lon.toFixed(4)}).
+              {emergencyContact && ` Your contact (${emergencyContact}) has been notified.`}
             </DialogDescription>
             
             <div className="grid grid-cols-2 gap-4 mt-8 w-full max-w-sm">
