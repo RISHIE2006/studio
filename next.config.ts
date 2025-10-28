@@ -24,9 +24,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  devServer: {
-    port: 9002,
-  }
 };
 
 export default nextConfig;
