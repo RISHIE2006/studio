@@ -34,6 +34,10 @@ const sendSmsFlow = ai.defineFlow(
       console.error('Twilio credentials are not configured in .env file.');
       throw new Error('SMS service is not configured. Missing Twilio credentials.');
     }
+    
+    if (!accountSid.startsWith('AC')) {
+      throw new Error('Invalid Twilio Account SID. It must start with "AC". Please check your .env file.');
+    }
 
     const client = twilio(accountSid, authToken);
 
