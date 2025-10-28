@@ -18,6 +18,7 @@ import { DroneIcon } from './icons/drone-icon';
 import { AmbulanceIcon } from './icons/ambulance-icon';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { sendSms } from '@/ai/flows/send-sms-flow';
 
 type ModalStep = 'contact' | 'location' | 'tracking';
 
@@ -43,7 +44,7 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
     }
   }, [isOpen]);
 
-  const handleContactSubmit = () => {
+  const handleContactSubmit = async () => {
     if (emergencyContact && !/^\d{10}$/.test(emergencyContact)) {
         toast({
             variant: 'destructive',
@@ -53,37 +54,64 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
         return;
     }
     setStep('location');
-    startLocationAcquisition();
-  };
+    const acquiredLocation = await startLocationAcquisition();
 
-  const startLocationAcquisition = () => {
-     if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setLocation({
-              lat: position.coords.latitude,
-              lon: position.coords.longitude,
-            });
-            setLocationError(null);
-            setTimeout(() => setStep('tracking'), 1000);
-          },
-          (error) => {
-            setLocationError(error.message);
-            toast({
-              variant: 'destructive',
-              title: 'Location Access Denied',
-              description: 'Please enable location services for emergency dispatch.',
-            });
-          }
-        );
-      } else {
-        setLocationError('Geolocation is not supported by your browser.');
+    if (acquiredLocation && emergencyContact) {
+      try {
+        await sendSms({
+          to: `+91${emergencyContact}`, // Assuming Indian phone numbers
+          message: `Emergency SOS from HighwayHealers. Location: https://www.google.com/maps?q=${acquiredLocation.lat},${acquiredLocation.lon}`,
+        });
+        toast({
+          title: 'Emergency Contact Notified',
+          description: `An SMS has been sent to ${emergencyContact}.`,
+        });
+      } catch (e) {
+        console.error('SMS sending error:', e);
+        const error = e as Error;
         toast({
           variant: 'destructive',
-          title: 'Geolocation Not Supported',
-          description: 'Your browser does not support geolocation.',
+          title: 'SMS Failed',
+          description: error.message || 'Could not send SMS to emergency contact.',
         });
       }
+    }
+  };
+
+  const startLocationAcquisition = (): Promise<{ lat: number; lon: number } | null> => {
+    return new Promise((resolve) => {
+       if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const newLocation = {
+                lat: position.coords.latitude,
+                lon: position.coords.longitude,
+              };
+              setLocation(newLocation);
+              setLocationError(null);
+              setTimeout(() => setStep('tracking'), 1000);
+              resolve(newLocation);
+            },
+            (error) => {
+              setLocationError(error.message);
+              toast({
+                variant: 'destructive',
+                title: 'Location Access Denied',
+                description: 'Please enable location services for emergency dispatch.',
+              });
+              resolve(null);
+            }
+          );
+        } else {
+          setLocationError('Geolocation is not supported by your browser.');
+          toast({
+            variant: 'destructive',
+            title: 'Geolocation Not Supported',
+            description: 'Your browser does not support geolocation.',
+          });
+          resolve(null);
+        }
+    });
   }
 
 
