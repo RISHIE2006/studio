@@ -3,18 +3,12 @@
  * @fileOverview A flow for sending SMS messages using Twilio.
  * 
  * - sendSms - A function that sends an SMS message to a given phone number.
- * - SmsInput - The input type for the sendSms function.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 import twilio from 'twilio';
-
-export const SmsInputSchema = z.object({
-  to: z.string().describe('The recipient\'s phone number in E.164 format.'),
-  message: z.string().describe('The content of the SMS message.'),
-});
-export type SmsInput = z.infer<typeof SmsInputSchema>;
+import { SmsInputSchema, type SmsInput } from './sms-types';
 
 export async function sendSms(input: SmsInput): Promise<{ success: boolean; messageId?: string }> {
   return sendSmsFlow(input);
