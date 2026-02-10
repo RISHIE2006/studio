@@ -45,11 +45,11 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
   }, [isOpen]);
 
   const handleContactSubmit = async () => {
-    if (emergencyContact && !/^\d{10}$/.test(emergencyContact)) {
+    if (emergencyContact && !/^\+?91\d{10}$/.test(emergencyContact.replace(/\s/g, ''))) {
         toast({
             variant: 'destructive',
             title: 'Invalid Phone Number',
-            description: 'Please enter a valid 10-digit phone number.',
+            description: 'Please enter a valid 10-digit Indian phone number.',
         });
         return;
     }
@@ -58,14 +58,22 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
 
     if (acquiredLocation && emergencyContact) {
       try {
-        await sendSms({
-          to: `+91${emergencyContact}`, // Assuming Indian phone numbers
+        const result = await sendSms({
+          to: emergencyContact.startsWith('+') ? emergencyContact : `+91${emergencyContact}`,
           message: `Emergency SOS from HighwayHealers. Location: https://www.google.com/maps?q=${acquiredLocation.lat},${acquiredLocation.lon}`,
         });
-        toast({
-          title: 'Emergency Contact Notified',
-          description: `An SMS has been sent to ${emergencyContact}.`,
-        });
+        if (result.success) {
+          toast({
+            title: 'Emergency Contact Notified',
+            description: `An SMS has been sent to ${emergencyContact}.`,
+          });
+        } else {
+           toast({
+            variant: 'destructive',
+            title: 'SMS Failed',
+            description: 'Could not send SMS. Please check app configuration.',
+          });
+        }
       } catch (e) {
         console.error('SMS sending error:', e);
         const error = e as Error;
@@ -128,7 +136,7 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
           >
             <DialogTitle className="text-2xl font-bold">Emergency Contact</DialogTitle>
             <DialogDescription className="mt-2">
-              Enter a phone number to notify in case of an emergency.
+              Enter a phone number to notify in case of an emergency (India only).
             </DialogDescription>
 
             <div className="my-8 w-full max-w-sm">
@@ -139,7 +147,7 @@ export function EmergencyModal({ isOpen, onClose }: EmergencyModalProps) {
                     <Input
                         id="emergency-contact"
                         type="tel"
-                        placeholder="e.g., 1234567890"
+                        placeholder="e.g., 9876543210"
                         value={emergencyContact}
                         onChange={(e) => setEmergencyContact(e.target.value)}
                     />

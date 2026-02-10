@@ -31,12 +31,13 @@ const sendSmsFlow = ai.defineFlow(
     const fromNumber = process.env.TWILIO_PHONE_NUMBER;
 
     if (!accountSid || !authToken || !fromNumber) {
-      console.error('Twilio credentials are not configured in .env file.');
-      throw new Error('SMS service is not configured. Missing Twilio credentials.');
+      console.error('Twilio credentials are not configured in .env file. Skipping SMS.');
+      return { success: false };
     }
     
     if (!accountSid.startsWith('AC')) {
-      throw new Error('Invalid Twilio Account SID. It must start with "AC". Please check your .env file.');
+       console.error('Invalid Twilio Account SID. It must start with "AC". Please check your .env file. Skipping SMS.');
+       return { success: false };
     }
 
     const client = twilio(accountSid, authToken);
@@ -51,7 +52,7 @@ const sendSmsFlow = ai.defineFlow(
       return { success: true, messageId: result.sid };
     } catch (error) {
       console.error('Failed to send SMS:', error);
-      throw new Error('Failed to send SMS.');
+      return { success: false };
     }
   }
 );
