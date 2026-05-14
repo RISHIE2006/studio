@@ -1,6 +1,23 @@
 {
-  "name": "nextn",
-  "version": "0.1.0",
+  "name": "highway-healers",
+  "version": "1.0.0",
+  "description": "AI-powered highway emergency response platform. Instant SOS, AI first-aid, medicine locator, and dynamic resource allocation.",
+  "author": "RISHIE2006",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RISHIE2006/studio.git"
+  },
+  "keywords": [
+    "highway",
+    "emergency",
+    "sos",
+    "first-aid",
+    "genkit",
+    "nextjs",
+    "firebase",
+    "india"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
