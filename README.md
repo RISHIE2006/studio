@@ -8,6 +8,7 @@ HighwayHealers is an AI-powered highway emergency response platform built with *
 
 ## 📋 Table of Contents
 
+- [Screenshots](#-screenshots)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
@@ -20,6 +21,35 @@ HighwayHealers is an AI-powered highway emergency response platform built with *
 - [Deployment](#-deployment)
 - [Contributing](#-contributing)
 - [License](#-license)
+
+---
+
+## 📸 Screenshots
+
+### Home — SOS Emergency Landing
+> One-tap SOS button with animated hero section and quick-access navigation.
+
+![Home Page](screenshots/01-home.jpg)
+
+### Partner Login
+> Secure login for NHAI-verified partners with email and password authentication.
+
+![Login Page](screenshots/02-login.jpg)
+
+### Partner Sign Up
+> Quick registration for new partners — clinics, kiosks, and drivers.
+
+![Sign Up Page](screenshots/03-signup.jpg)
+
+### Medicine Locator
+> Interactive map to find and pre-order essential medicines at nearby highway pickup points.
+
+![Medicine Locator](screenshots/04-medicine-locator.jpg)
+
+### NHAI Partner Dashboard
+> AI-powered dynamic resource allocation — predict ambulance, drone, and doctor needs for any emergency scenario.
+
+![NHAI Dashboard](screenshots/05-nhai-dashboard.jpg)
 
 ---
 
