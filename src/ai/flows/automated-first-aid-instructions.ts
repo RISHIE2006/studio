@@ -39,12 +39,15 @@ const firstAidPrompt = ai.definePrompt({
   Based on the user's description of the emergency situation, provide clear, concise, and step-by-step first-aid instructions.
 
   Situation Description: {{{situationDescription}}}
-  `, safetySettings: [
-    {
-      category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-      threshold: 'BLOCK_NONE',
-    },
-  ],
+  `,
+  config: {
+    safetySettings: [
+      {
+        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+        threshold: 'BLOCK_NONE',
+      },
+    ],
+  },
 });
 
 const firstAidInstructionsFlow = ai.defineFlow(

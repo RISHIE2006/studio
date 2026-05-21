@@ -16,7 +16,7 @@ import Link from 'next/link';
 export default function LoginPage() {
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Check for partner credentials and redirect to dashboard
     const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value;
